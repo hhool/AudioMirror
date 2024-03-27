@@ -67,6 +67,7 @@ So, the driver should return TRUE if any one of the effects is on and returns FA
 NTSTATUS MiniportWaveRTStream::GetLfxState(_Out_ BOOL *_pbEnable)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	*_pbEnable = m_bLfxEnabled;
 	return STATUS_SUCCESS;
@@ -97,6 +98,7 @@ when they see appropriate.
 NTSTATUS MiniportWaveRTStream::SetLfxState(_In_ BOOL _bEnable)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 
 	UNREFERENCED_PARAMETER(_bEnable);
@@ -129,6 +131,7 @@ Remarks
 NTSTATUS MiniportWaveRTStream::GetStreamChannelVolume(_In_ UINT32 _uiChannel, _Out_ LONG *_pVolume)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 
 	*_pVolume = m_plVolumeLevel[_uiChannel];
@@ -163,6 +166,7 @@ STDMETHODIMP_(NTSTATUS) MiniportWaveRTStream::GetStreamChannelMute(_In_ UINT32 _
 	NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ASSERT(_pbMute);
 
 	ntStatus = GetChannelMute(_uiChannel, _pbMute);
@@ -199,6 +203,7 @@ NTSTATUS MiniportWaveRTStream::GetStreamAttributeSteppings(_In_  eChannelTargetT
 	NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 
 	switch (_targetType)
@@ -257,6 +262,7 @@ STDMETHODIMP_(NTSTATUS) MiniportWaveRTStream::SetStreamChannelVolume
 	NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 
 	// Snap the volume level to our range of steppings.
@@ -306,6 +312,7 @@ STDMETHODIMP_(NTSTATUS) MiniportWaveRTStream::GetStreamChannelPeakMeter(_In_ UIN
 	NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 
 	ntStatus = GetChannelPeakMeter(_uiChannel, _pPeakMeterValue);
@@ -341,6 +348,7 @@ NTSTATUS MiniportWaveRTStream::SetStreamChannelMute(_In_ UINT32 _uiChannel, _In_
 	NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	// If Channel is ALL_CHANNELS_ID, then set the mute info on all channels
 	if (ALL_CHANNELS_ID == _uiChannel)
@@ -385,6 +393,7 @@ NTSTATUS MiniportWaveRTStream::GetStreamPresentationPosition(_Out_ KSAUDIO_PRESE
 	NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ASSERT(_pPresentationPosition);
 
 	ntStatus = GetPresentationPosition(_pPresentationPosition);
@@ -429,6 +438,7 @@ NTSTATUS MiniportWaveRTStream::SetStreamCurrentWritePosition(_In_ ULONG _ulCurre
 	NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	ntStatus = SetCurrentWritePosition(_ulCurrentWritePosition);
 
@@ -462,6 +472,7 @@ NTSTATUS MiniportWaveRTStream::GetStreamLinearBufferPosition(_Out_ ULONGLONG *_p
 	NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ASSERT(_pullLinearBufferPosition);
 
 	ntStatus = GetPositions(_pullLinearBufferPosition, NULL, NULL);
@@ -499,6 +510,7 @@ NTSTATUS MiniportWaveRTStream::SetStreamLoopbackProtection(_In_ CONSTRICTOR_OPTI
 
 	UNREFERENCED_PARAMETER(protectionOption);
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	return ntStatus;
 }
@@ -531,6 +543,7 @@ NTSTATUS MiniportWaveRTStream::GetStreamChannelCount(_In_  eChannelTargetType   
 	NTSTATUS ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 
 	switch (_targetType)
@@ -560,6 +573,7 @@ NTSTATUS MiniportWaveRTStream::GetStreamChannelCount(_In_  eChannelTargetType   
 NTSTATUS MiniportWaveRTStream::GetVolumeChannelCount(_Out_ UINT32 *_puiChannelCount)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 
 	ASSERT(_puiChannelCount);
@@ -574,6 +588,7 @@ NTSTATUS MiniportWaveRTStream::GetVolumeChannelCount(_Out_ UINT32 *_puiChannelCo
 NTSTATUS MiniportWaveRTStream::GetVolumeSteppings(_Out_writes_bytes_(_ui32DataSize)  PKSPROPERTY_STEPPING_LONG _pKsPropStepLong, _In_  UINT32 _ui32DataSize)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	UINT32 ulChannelCount = _ui32DataSize / sizeof(KSPROPERTY_STEPPING_LONG);
 	ASSERT(_pKsPropStepLong);
 
@@ -595,6 +610,7 @@ NTSTATUS MiniportWaveRTStream::GetVolumeSteppings(_Out_writes_bytes_(_ui32DataSi
 NTSTATUS MiniportWaveRTStream::GetChannelVolume(_In_  UINT32 _uiChannel, _Out_  LONG *_pVolume)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ASSERT(_pVolume);
 
 	*_pVolume = m_plVolumeLevel[_uiChannel];
@@ -605,6 +621,7 @@ NTSTATUS MiniportWaveRTStream::GetChannelVolume(_In_  UINT32 _uiChannel, _Out_  
 NTSTATUS MiniportWaveRTStream::SetChannelVolume(_In_  UINT32 _uiChannel, _In_  LONG _Volume)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	m_plVolumeLevel[_uiChannel] = _Volume;
 
@@ -615,6 +632,7 @@ NTSTATUS MiniportWaveRTStream::SetChannelVolume(_In_  UINT32 _uiChannel, _In_  L
 NTSTATUS MiniportWaveRTStream::GetPeakMeterChannelCount(_Out_ UINT32 *puiChannelCount)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	ASSERT(puiChannelCount);
 	ASSERT(m_pWfExt);
@@ -628,6 +646,7 @@ NTSTATUS MiniportWaveRTStream::GetPeakMeterChannelCount(_Out_ UINT32 *puiChannel
 NTSTATUS MiniportWaveRTStream::GetPeakMeterSteppings(_Out_writes_bytes_(_ui32DataSize) PKSPROPERTY_STEPPING_LONG _pKsPropStepLong, _In_  UINT32 _ui32DataSize)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	UINT32 ulChannelCount = _ui32DataSize / sizeof(KSPROPERTY_STEPPING_LONG);
 
 	ASSERT(_pKsPropStepLong);
@@ -650,6 +669,7 @@ NTSTATUS MiniportWaveRTStream::GetPeakMeterSteppings(_Out_writes_bytes_(_ui32Dat
 NTSTATUS MiniportWaveRTStream::GetChannelPeakMeter(_In_  UINT32 _uiChannel, _Out_  LONG *_plPeakMeter)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ASSERT(_plPeakMeter);
 	UNREFERENCED_PARAMETER(_uiChannel);
 
@@ -664,6 +684,7 @@ NTSTATUS MiniportWaveRTStream::GetChannelPeakMeter(_In_  UINT32 _uiChannel, _Out
 NTSTATUS MiniportWaveRTStream::GetMuteChannelCount(_Out_ UINT32 *puiChannelCount)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	ASSERT(puiChannelCount);
 	ASSERT(m_pWfExt);
@@ -677,6 +698,7 @@ NTSTATUS MiniportWaveRTStream::GetMuteChannelCount(_Out_ UINT32 *puiChannelCount
 NTSTATUS MiniportWaveRTStream::GetMuteSteppings(_Out_writes_bytes_(_ui32DataSize) PKSPROPERTY_STEPPING_LONG _pKsPropStepLong, _In_  UINT32 _ui32DataSize)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	UINT32 ulChannelCount = _ui32DataSize / sizeof(KSPROPERTY_STEPPING_LONG);
 
 	ASSERT(_pKsPropStepLong);
@@ -699,6 +721,7 @@ NTSTATUS MiniportWaveRTStream::GetMuteSteppings(_Out_writes_bytes_(_ui32DataSize
 NTSTATUS MiniportWaveRTStream::GetChannelMute(_In_  UINT32 _uiChannel, _Out_  BOOL *_pbMute)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ASSERT(_pbMute);
 
 	*_pbMute = m_pbMuted[_uiChannel];
@@ -708,6 +731,7 @@ NTSTATUS MiniportWaveRTStream::GetChannelMute(_In_  UINT32 _uiChannel, _Out_  BO
 NTSTATUS MiniportWaveRTStream::SetChannelMute(_In_  UINT32 _uiChannel, _In_  BOOL _bMute)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	m_pbMuted[_uiChannel] = _bMute;
 
@@ -725,6 +749,7 @@ NTSTATUS MiniportWaveRTStream::SetChannelMute(_In_  UINT32 _uiChannel, _In_  BOO
 
 NTSTATUS MiniportWaveRTStream::GetPresentationPosition(_Out_  KSAUDIO_PRESENTATION_POSITION *_pPresentationPosition)
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ASSERT(_pPresentationPosition);
 	LARGE_INTEGER timeStamp;
 	IAdapterCommon* pAdapterComm = m_pMiniport->GetAdapter();
@@ -758,6 +783,7 @@ NTSTATUS MiniportWaveRTStream::GetPresentationPosition(_Out_  KSAUDIO_PRESENTATI
 #pragma code_seg()
 NTSTATUS MiniportWaveRTStream::SetCurrentWritePosition(_In_  ULONG _ulCurrentWritePosition)
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	NTSTATUS ntStatus;
 
@@ -790,6 +816,7 @@ Done:
 #pragma code_seg()
 NTSTATUS MiniportWaveRTStream::SetCurrentWritePositionInternal(_In_  ULONG _ulCurrentWritePosition)
 {
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	ASSERT(m_bEoSReceived == FALSE);
 
@@ -851,6 +878,7 @@ NTSTATUS MiniportWaveRTStream::GetPositions
 	_Out_opt_  LARGE_INTEGER *  _pliQPCTime
 )
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	NTSTATUS        ntStatus;
 	LARGE_INTEGER   ilQPC;
@@ -925,6 +953,7 @@ Remarks
 NTSTATUS MiniportWaveRTStream::SetLoopbackProtection(_In_ CONSTRICTOR_OPTION protectionOption)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	UNREFERENCED_PARAMETER(protectionOption);
 	//
@@ -964,6 +993,7 @@ NTSTATUS MiniportWaveRTStream::SetLoopbackProtection(_In_ CONSTRICTOR_OPTION pro
 
 NTSTATUS MiniportWaveRTStream::SetStreamCurrentWritePositionForLastBuffer(_In_ ULONG _ulWritePosition)
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	NTSTATUS        ntStatus;
 	KIRQL           oldIrql;
 

@@ -130,6 +130,7 @@ NTSTATUS AdapterCommon::InstallVirtualCable(IRP * irp)
 	NTSTATUS ntStatus = STATUS_SUCCESS;
 	IUnknown* unknownMic;
 	IUnknown* unknownSpeaker;
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	ntStatus = InstallVirtualMic(irp, &unknownMic);
 	IF_FAILED_ACTION_RETURN(ntStatus, DPF(D_TERSE, ("InstallVirtualMic failed, 0x%x", ntStatus)));
@@ -148,6 +149,7 @@ NTSTATUS AdapterCommon::InstallVirtualCable(IRP * irp)
 NTSTATUS AdapterCommon::InstallVirtualMic(IRP* Irp, IUnknown** unknownMiniport)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	NTSTATUS ntStatus = STATUS_NOT_IMPLEMENTED;
 
 	ENDPOINT_MINIPAIR* pCaptureMiniport = NULL;
@@ -164,6 +166,7 @@ NTSTATUS AdapterCommon::InstallVirtualMic(IRP* Irp, IUnknown** unknownMiniport)
 NTSTATUS AdapterCommon::InstallVirtualSpeaker(IRP* Irp, IUnknown** unknownMiniport)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	NTSTATUS ntStatus = STATUS_NOT_IMPLEMENTED;
 
 	ENDPOINT_MINIPAIR* pRenderMiniport = NULL;
@@ -203,6 +206,7 @@ Return Value:
 --*/
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	ASSERT(Object);
 
@@ -234,17 +238,20 @@ Return Value:
 
 PDEVICE_OBJECT __stdcall AdapterCommon::GetDeviceObject(void)
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	return m_pDeviceObject;
 }
 
 PDEVICE_OBJECT __stdcall AdapterCommon::GetPhysicalDeviceObject(void)
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	return m_pPhysicalDeviceObject;
 }
 
 #pragma code_seg()
 NTSTATUS __stdcall AdapterCommon::WriteEtwEvent(EPcMiniportEngineEvent miniportEventType, ULONGLONG ullData1, ULONGLONG ullData2, ULONGLONG ullData3, ULONGLONG ullData4)
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	NTSTATUS ntStatus = STATUS_SUCCESS;
 
 	if (m_pPortClsEtwHelper)
@@ -258,6 +265,7 @@ NTSTATUS __stdcall AdapterCommon::WriteEtwEvent(EPcMiniportEngineEvent miniportE
 void __stdcall AdapterCommon::SetEtwHelper(PPORTCLSETWHELPER _pPortClsEtwHelper)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	SAFE_RELEASE(m_pPortClsEtwHelper);
 

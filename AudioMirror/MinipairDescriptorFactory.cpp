@@ -10,15 +10,18 @@
 
 MinipairDescriptorFactory::MinipairDescriptorFactory()
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 }
 MinipairDescriptorFactory::~MinipairDescriptorFactory()
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 }
 
 void MinipairDescriptorFactory::SetLastCharacterOfString(PWSTR string, int valueToSet)
 {
 	UNREFERENCED_PARAMETER(string);
 	UNREFERENCED_PARAMETER(valueToSet);
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	//TODO: implement
 	//string[wcslen(string) - 1] = ('0' + (valueToSet % 36));
 }
@@ -70,6 +73,7 @@ ENDPOINT_MINIPAIR MinipairDescriptorFactory::m_SpeakerTemplate =
 
 NTSTATUS MinipairDescriptorFactory::CreateSpeaker(_Outptr_ ENDPOINT_MINIPAIR** pMinipair)
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ENDPOINT_MINIPAIR* pNewMinipair = new(NonPagedPoolNx, MINIADAPTER_POOLTAG) ENDPOINT_MINIPAIR;
 	if (!pNewMinipair)
 	{
@@ -94,6 +98,7 @@ NTSTATUS MinipairDescriptorFactory::CreateSpeaker(_Outptr_ ENDPOINT_MINIPAIR** p
 
 NTSTATUS MinipairDescriptorFactory::CreateMicrophone(_Outptr_ ENDPOINT_MINIPAIR** pMinipair)
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ENDPOINT_MINIPAIR* pNewMinipair = new(NonPagedPoolNx, MINIADAPTER_POOLTAG) ENDPOINT_MINIPAIR;
 	if (!pNewMinipair) 
 	{

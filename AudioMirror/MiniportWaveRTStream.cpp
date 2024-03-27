@@ -30,6 +30,7 @@ Return Value:
 --*/
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	if (NULL != m_pMiniport)
 	{
 
@@ -143,6 +144,7 @@ Return Value:
 --*/
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	PWAVEFORMATEX pWfEx = NULL;
 	NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -272,7 +274,7 @@ STDMETHODIMP_(NTSTATUS)
 MiniportWaveRTStream::NonDelegatingQueryInterface
 (
 	_In_ REFIID  Interface,
-	_COM_Outptr_ PVOID * Object
+	_COM_Outptr_ PVOID* Object
 )
 /*++
 
@@ -293,6 +295,7 @@ Return Value:
 --*/
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	ASSERT(Object);
 
@@ -350,13 +353,14 @@ NTSTATUS MiniportWaveRTStream::AllocateBufferWithNotification
 (
 	_In_    ULONG               NotificationCount_,
 	_In_    ULONG               RequestedSize_,
-	_Out_   PMDL                *AudioBufferMdl_,
-	_Out_   ULONG               *ActualSize_,
-	_Out_   ULONG               *OffsetFromFirstPage_,
-	_Out_   MEMORY_CACHING_TYPE *CacheType_
+	_Out_   PMDL* AudioBufferMdl_,
+	_Out_   ULONG* ActualSize_,
+	_Out_   ULONG* OffsetFromFirstPage_,
+	_Out_   MEMORY_CACHING_TYPE* CacheType_
 )
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	ULONG ulBufferDurationMs = 0;
 
@@ -426,6 +430,7 @@ VOID MiniportWaveRTStream::FreeBufferWithNotification
 	UNREFERENCED_PARAMETER(Size_);
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	if (Mdl_ != NULL)
 	{
@@ -454,8 +459,9 @@ NTSTATUS MiniportWaveRTStream::RegisterNotificationEvent
 	UNREFERENCED_PARAMETER(NotificationEvent_);
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
-	NotificationListEntry *nleNew = (NotificationListEntry*)ExAllocatePoolWithTag(
+	NotificationListEntry* nleNew = (NotificationListEntry*)ExAllocatePoolWithTag(
 		NonPagedPoolNx,
 		sizeof(NotificationListEntry),
 		MINWAVERTSTREAM_POOLTAG);
@@ -498,6 +504,7 @@ NTSTATUS MiniportWaveRTStream::UnregisterNotificationEvent
 	UNREFERENCED_PARAMETER(NotificationEvent_);
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	if (!IsListEmpty(&m_NotificationList))
 	{
@@ -530,6 +537,7 @@ NTSTATUS MiniportWaveRTStream::GetClockRegister
 	UNREFERENCED_PARAMETER(Register_);
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	return STATUS_NOT_IMPLEMENTED;
 }
@@ -556,6 +564,7 @@ VOID MiniportWaveRTStream::GetHWLatency
 )
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	ASSERT(Latency_);
 
@@ -575,6 +584,7 @@ VOID MiniportWaveRTStream::FreeAudioBuffer
 	UNREFERENCED_PARAMETER(Size_);
 
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	if (Mdl_ != NULL)
 	{
@@ -596,13 +606,14 @@ VOID MiniportWaveRTStream::FreeAudioBuffer
 NTSTATUS MiniportWaveRTStream::AllocateAudioBuffer
 (
 	_In_    ULONG                   RequestedSize_,
-	_Out_   PMDL                   *AudioBufferMdl_,
-	_Out_   ULONG                  *ActualSize_,
-	_Out_   ULONG                  *OffsetFromFirstPage_,
-	_Out_   MEMORY_CACHING_TYPE    *CacheType_
+	_Out_   PMDL* AudioBufferMdl_,
+	_Out_   ULONG* ActualSize_,
+	_Out_   ULONG* OffsetFromFirstPage_,
+	_Out_   MEMORY_CACHING_TYPE* CacheType_
 )
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	if ((0 == RequestedSize_) || (RequestedSize_ < m_pWfExt->Format.nBlockAlign))
 	{
@@ -654,10 +665,11 @@ NTSTATUS MiniportWaveRTStream::AllocateAudioBuffer
 #pragma code_seg()
 NTSTATUS MiniportWaveRTStream::GetPosition
 (
-	_Out_   KSAUDIO_POSITION    *Position_
+	_Out_   KSAUDIO_POSITION* Position_
 )
 {
 	NTSTATUS ntStatus;
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	KIRQL oldIrql;
 	KeAcquireSpinLock(&m_PositionSpinLock, &oldIrql);
@@ -681,7 +693,7 @@ NTSTATUS MiniportWaveRTStream::GetPosition
 #if defined(SYSVAD_BTH_BYPASS)
 	Done:
 #endif // defined(SYSVAD_BTH_BYPASS)
-		return ntStatus;
+	return ntStatus;
 }
 
 //=============================================================================
@@ -704,12 +716,13 @@ NTSTATUS MiniportWaveRTStream::GetPosition
 #pragma code_seg()
 NTSTATUS MiniportWaveRTStream::GetReadPacket
 (
-	_Out_ ULONG     *PacketNumber,
-	_Out_ DWORD     *Flags,
-	_Out_ ULONG64   *PerformanceCounterValue,
-	_Out_ BOOL      *MoreData
+	_Out_ ULONG* PacketNumber,
+	_Out_ DWORD* Flags,
+	_Out_ ULONG64* PerformanceCounterValue,
+	_Out_ BOOL* MoreData
 )
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ULONG availablePacketNumber;
 	ULONG droppedPackets;
 
@@ -786,8 +799,8 @@ NTSTATUS MiniportWaveRTStream::GetReadPacket
 	// For test, embed packet number and timestamp into first two LONGLONGs of the packet
 	LONG packetIndex = availablePacketNumber % m_ulNotificationsPerBuffer;
 	SIZE_T packetSize = m_ulDmaBufferSize / m_ulNotificationsPerBuffer;
-	BYTE *packetDataAsBytes = m_pDmaBuffer + (packetIndex * packetSize);
-	LONGLONG *packetDataAsLonglongs = (LONGLONG*)packetDataAsBytes;
+	BYTE* packetDataAsBytes = m_pDmaBuffer + (packetIndex * packetSize);
+	LONGLONG* packetDataAsLonglongs = (LONGLONG*)packetDataAsBytes;
 	for (int i = 0; i < packetSize / sizeof(LONGLONG); i++)
 	{
 		packetDataAsLonglongs[i] = i;
@@ -807,6 +820,7 @@ NTSTATUS MiniportWaveRTStream::SetWritePacket
 	_In_ ULONG      EosPacketLength
 )
 {
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	NTSTATUS ntStatus;
 
 	// The call must be from event driven mode
@@ -894,9 +908,10 @@ NTSTATUS MiniportWaveRTStream::SetWritePacket
 #pragma code_seg()
 NTSTATUS MiniportWaveRTStream::GetOutputStreamPresentationPosition
 (
-	_Out_ KSAUDIO_PRESENTATION_POSITION *pPresentationPosition
+	_Out_ KSAUDIO_PRESENTATION_POSITION* pPresentationPosition
 )
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ASSERT(pPresentationPosition);
 
 	// The call must be from event driven mode
@@ -912,9 +927,10 @@ NTSTATUS MiniportWaveRTStream::GetOutputStreamPresentationPosition
 #pragma code_seg()
 NTSTATUS MiniportWaveRTStream::GetPacketCount
 (
-	_Out_ ULONG *pPacketCount
+	_Out_ ULONG* pPacketCount
 )
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	ASSERT(pPacketCount);
 
 	// The call must be from event driven mode
@@ -946,8 +962,9 @@ NTSTATUS MiniportWaveRTStream::SetState
 	_In_    KSSTATE State_
 )
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	NTSTATUS        ntStatus = STATUS_SUCCESS;
-	IAdapterCommon*  pAdapterComm = m_pMiniport->GetAdapter();
+	IAdapterCommon* pAdapterComm = m_pMiniport->GetAdapter();
 	KIRQL oldIrql;
 
 	// Spew an event for a pin state change request from portcls
@@ -1029,7 +1046,7 @@ NTSTATUS MiniportWaveRTStream::SetState
 
 		// Start DMA
 		LARGE_INTEGER ullPerfCounterTemp;
-		
+
 		ullPerfCounterTemp = KeQueryPerformanceCounter(&m_ullPerformanceCounterFrequency);
 		m_ullLastDPCTimeStamp = m_ullDmaTimeStamp = KSCONVERT_PERFORMANCE_TIME(m_ullPerformanceCounterFrequency.QuadPart, ullPerfCounterTemp);
 		m_RingBuffer->Clear();
@@ -1058,13 +1075,14 @@ NTSTATUS MiniportWaveRTStream::SetState
 #if defined(SYSVAD_BTH_BYPASS)
 	Done:
 #endif  // defined(SYSVAD_BTH_BYPASS)
-		return ntStatus;
+	return ntStatus;
 }
 
 #pragma code_seg("PAGE")
 void MiniportWaveRTStream::SetPairedStream(MiniportWaveRTStream* stream)
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	if (m_RingBuffer) m_RingBuffer->Clear();
 	m_PairedStream = stream;
 }
@@ -1075,20 +1093,28 @@ NTSTATUS MiniportWaveRTStream::WriteAudioPacket(BYTE* buffer, ULONG packetSize, 
 	UNREFERENCED_PARAMETER(buffer);
 	UNREFERENCED_PARAMETER(packetSize);
 	UNREFERENCED_PARAMETER(eos);
+	DPF_ENTER(("[%s,%d,0x%x,%s] packetSize[%ld] eos[%d]", __FILE__, __LINE__, this, __FUNCTION__,
+		packetSize, eos));
 
 	//only allowed on capture stream
 	if (!m_bCapture) return STATUS_NOT_IMPLEMENTED;
 	//if we dont have a paired stream this is not allowed
 	if (m_PairedStream == NULL) return STATUS_INVALID_DEVICE_STATE;
 	if (m_RingBuffer == NULL) return STATUS_DEVICE_NOT_READY;
-	if (packetSize > m_RingBuffer->GetSize()) return STATUS_BUFFER_TOO_SMALL;
+	if (packetSize > m_RingBuffer->GetSize()) {
+		DPF(D_TERSE, ("[%s,%d,0x%x,%s] Packet size is too large", __FILE__, __LINE__, this, __FUNCTION__))
+		return STATUS_BUFFER_TOO_SMALL;
+	}
 
 	NTSTATUS state = m_RingBuffer->Put(buffer, packetSize);
 	switch (state)
 	{
 	case STATUS_BUFFER_TOO_SMALL:
+		DPF(D_TERSE, ("[%s,%d,0x%x,%s] Packet size is too large", __FILE__, __LINE__, this, __FUNCTION__))
 		return state;
 	case STATUS_BUFFER_OVERFLOW:
+		DPF(D_TERSE, ("[%s,%d,0x%x,%s] Buffer overflow", __FILE__, __LINE__, this, __FUNCTION__))
+		return STATUS_SUCCESS;
 	default:
 		return STATUS_SUCCESS;
 		break;
@@ -1099,12 +1125,14 @@ NTSTATUS MiniportWaveRTStream::WriteAudioPacket(BYTE* buffer, ULONG packetSize, 
 #pragma code_seg("PAGE")
 NTSTATUS MiniportWaveRTStream::SetFormat
 (
-	_In_    KSDATAFORMAT    *DataFormat_
+	_In_    KSDATAFORMAT* DataFormat_
 )
 {
 	UNREFERENCED_PARAMETER(DataFormat_);
 
 	PAGED_CODE();
+	DPF(D_ERROR, ("[%s,%d,0x%x,%s] DataFormat_[%ld,%ld]", __FILE__, __LINE__, this, __FUNCTION__,
+		DataFormat_->FormatSize, DataFormat_->SampleSize));
 
 	//if (!m_fCapture && !g_DoNotCreateDataFiles)
 	//{
@@ -1121,6 +1149,7 @@ VOID MiniportWaveRTStream::UpdatePosition
 	_In_ LARGE_INTEGER ilQPC
 )
 {
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	// Convert ticks to 100ns units.
 	LONGLONG  hnsCurrentTime = KSCONVERT_PERFORMANCE_TIME(m_ullPerformanceCounterFrequency.QuadPart, ilQPC);
 
@@ -1233,6 +1262,8 @@ ByteDisplacement - # of bytes to process.
 --*/
 {
 	ULONG bufferOffset = m_ullLinearPosition % m_ulDmaBufferSize;
+	DPF_ENTER(("[0x%x,%s] ByteDisplacement[%ld] bufferOffset[%ld] m_ullLinearPosition[%lld] m_ulDmaBufferSize[%ld]",
+		this, __FUNCTION__, ByteDisplacement, bufferOffset, m_ullLinearPosition, m_ulDmaBufferSize));
 
 	// Normally this will loop no more than once for a single wrap, but if
 	// many bytes have been displaced then this may loops many times.
@@ -1240,13 +1271,13 @@ ByteDisplacement - # of bytes to process.
 	{
 		ULONG runWrite = min(ByteDisplacement, m_ulDmaBufferSize - bufferOffset);
 		SIZE_T actuallyWritten;
-		
+
 		m_RingBuffer->Take(m_pDmaBuffer + bufferOffset, runWrite, &actuallyWritten);
 		if (actuallyWritten < runWrite)
 		{
 			RtlZeroMemory(m_pDmaBuffer + bufferOffset + actuallyWritten, runWrite - actuallyWritten);
 		}
-		
+
 		bufferOffset = (bufferOffset + runWrite) % m_ulDmaBufferSize;
 		ByteDisplacement -= runWrite;
 	}
@@ -1271,6 +1302,8 @@ ByteDisplacement - # of bytes to process.
 --*/
 {
 	ULONG bufferOffset = m_ullLinearPosition % m_ulDmaBufferSize;
+	DPF_ENTER(("[%s,%d,0x%x,%s] ByteDisplacement[%ld] bufferOffset[%ld] m_ullLinearPosition[%lld] m_ulDmaBufferSize[%ld]",
+		__FILE__, __LINE__, this, __FUNCTION__, ByteDisplacement, bufferOffset, m_ullLinearPosition, m_ulDmaBufferSize));
 
 	// Normally this will loop no more than once for a single wrap, but if
 	// many bytes have been displaced then this may loops many times.
@@ -1292,6 +1325,7 @@ TimerNotifyRT
 	_In_opt_  PVOID        DeferredContext
 )
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	LARGE_INTEGER qpc;
 	LARGE_INTEGER qpcFrequency;
 	BOOL bufferCompleted = FALSE;
@@ -1346,7 +1380,7 @@ TimerNotifyRT
 		goto End;
 	}
 
-	IAdapterCommon*  pAdapterComm = _this->m_pMiniport->GetAdapter();
+	IAdapterCommon* pAdapterComm = _this->m_pMiniport->GetAdapter();
 
 	// Simple buffer underrun detection.
 	if (!_this->IsCurrentWaveRTWritePositionUpdated() && !_this->m_bEoSReceived)

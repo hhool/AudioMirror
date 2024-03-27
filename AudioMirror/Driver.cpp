@@ -174,6 +174,7 @@ Return Value:
 --*/
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	NTSTATUS        ntStatus;
 
@@ -314,6 +315,7 @@ Return Value:
 	// This method will be called in IRQL PASSIVE_LEVEL
 #pragma warning(suppress: 28118)
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	ASSERT(_DeviceObject);
 	ASSERT(_Irp);

@@ -18,6 +18,7 @@ NTSTATUS MiniportTopology::Create(
 )
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	UNREFERENCED_PARAMETER(UnknownAdapter);
 
@@ -56,17 +57,19 @@ MiniportTopology::MiniportTopology
 	m_DeviceContext(DeviceContext),
 	m_DeviceMaxChannels(DeviceMaxChannels)
 {
-	
+	DPF_ENTER(("[%s]", __FUNCTION__));
 }
 
 
 MiniportTopology::~MiniportTopology()
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	SAFE_RELEASE(m_Adapter);
 }
 
 NTSTATUS MiniportTopology::Init(PUNKNOWN UnknownAdapter, PRESOURCELIST ResourceList, PPORTTOPOLOGY Port)
 {
+	DPF_ENTER(("[%s]", __FUNCTION__));
 	UNREFERENCED_PARAMETER(ResourceList);
 	UNREFERENCED_PARAMETER(Port);
 
@@ -193,6 +196,7 @@ Return Value:
 --*/
 {
 	PAGED_CODE();
+	DPF_ENTER(("[%s]", __FUNCTION__));
 
 	ASSERT(Object);
 
