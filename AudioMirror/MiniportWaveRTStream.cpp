@@ -1308,17 +1308,38 @@ ByteDisplacement - # of bytes to process.
 	// Normally this will loop no more than once for a single wrap, but if
 	// many bytes have been displaced then this may loops many times.
 	NTSTATUS state = STATUS_SUCCESS;
+	ULONG count_of_buffer_overflow = 0;
+	static ULONG s_count_max_of_buffer_overflow = 10;
 	while (ByteDisplacement > 0)
 	{
 		ULONG runWrite = min(ByteDisplacement, m_ulDmaBufferSize - bufferOffset);
 		if (m_PairedStream)
 		{
 			state = m_PairedStream->WriteAudioPacket(m_pDmaBuffer + bufferOffset, runWrite, false);
-			if (!NT_SUCCESS(state))
+			if (state == STATUS_BUFFER_OVERFLOW)
+			{
+				// Sleep for a while to simulate the time it takes to write the data to paired stream.
+				KeStallExecutionProcessor(1000);
+				count_of_buffer_overflow++;
+				if (count_of_buffer_overflow > s_count_max_of_buffer_overflow)
+				{
+					DPF_ENTER(("[%s,%d,0x%x,%s] Buffer overflow count exceeded", __FILE__, __LINE__, this, __FUNCTION__))
+					break;
+				}
+				continue;
+			} 
+			else if (!NT_SUCCESS(state))
 			{
 				DPF_ENTER(("[%s,%d,0x%x,%s] WriteAudioPacket failed", __FILE__, __LINE__, this, __FUNCTION__))
 				break;
 			}
+			else
+			{
+				// success to write data to paired stream
+				// reset the count_of_buffer_overflow to 0
+				count_of_buffer_overflow = 0;
+			}
+
 		}
 		bufferOffset = (bufferOffset + runWrite) % m_ulDmaBufferSize;
 		ByteDisplacement -= runWrite;
