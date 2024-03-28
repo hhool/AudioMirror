@@ -1102,7 +1102,7 @@ NTSTATUS MiniportWaveRTStream::WriteAudioPacket(BYTE* buffer, ULONG packetSize, 
 	if (m_PairedStream == NULL) return STATUS_INVALID_DEVICE_STATE;
 	if (m_RingBuffer == NULL) return STATUS_DEVICE_NOT_READY;
 	if (packetSize > m_RingBuffer->GetSize()) {
-		DPF(D_TERSE, ("[%s,%d,0x%x,%s] Packet size is too large", __FILE__, __LINE__, this, __FUNCTION__))
+		DPF_ENTER(("[%s,%d,0x%x,%s] Packet size is too large", __FILE__, __LINE__, this, __FUNCTION__))
 		return STATUS_BUFFER_TOO_SMALL;
 	}
 
@@ -1110,11 +1110,11 @@ NTSTATUS MiniportWaveRTStream::WriteAudioPacket(BYTE* buffer, ULONG packetSize, 
 	switch (state)
 	{
 	case STATUS_BUFFER_TOO_SMALL:
-		DPF(D_TERSE, ("[%s,%d,0x%x,%s] Packet size is too large", __FILE__, __LINE__, this, __FUNCTION__))
+		DPF_ENTER(("[%s,%d,0x%x,%s] Packet size is too large", __FILE__, __LINE__, this, __FUNCTION__))
 		return state;
 	case STATUS_BUFFER_OVERFLOW:
-		DPF(D_TERSE, ("[%s,%d,0x%x,%s] Buffer overflow", __FILE__, __LINE__, this, __FUNCTION__))
-		return STATUS_SUCCESS;
+		DPF_ENTER(("[%s,%d,0x%x,%s] Buffer overflow", __FILE__, __LINE__, this, __FUNCTION__))
+		return STATUS_BUFFER_OVERFLOW;
 	default:
 		return STATUS_SUCCESS;
 		break;
@@ -1307,10 +1307,19 @@ ByteDisplacement - # of bytes to process.
 
 	// Normally this will loop no more than once for a single wrap, but if
 	// many bytes have been displaced then this may loops many times.
+	NTSTATUS state = STATUS_SUCCESS;
 	while (ByteDisplacement > 0)
 	{
 		ULONG runWrite = min(ByteDisplacement, m_ulDmaBufferSize - bufferOffset);
-		if (m_PairedStream) m_PairedStream->WriteAudioPacket(m_pDmaBuffer + bufferOffset, runWrite, false);
+		if (m_PairedStream)
+		{
+			state = m_PairedStream->WriteAudioPacket(m_pDmaBuffer + bufferOffset, runWrite, false);
+			if (!NT_SUCCESS(state))
+			{
+				DPF_ENTER(("[%s,%d,0x%x,%s] WriteAudioPacket failed", __FILE__, __LINE__, this, __FUNCTION__))
+				break;
+			}
+		}
 		bufferOffset = (bufferOffset + runWrite) % m_ulDmaBufferSize;
 		ByteDisplacement -= runWrite;
 	}

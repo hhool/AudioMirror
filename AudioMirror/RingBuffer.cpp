@@ -116,7 +116,7 @@ NTSTATUS RingBuffer::Put(BYTE* pBytes, SIZE_T count)
 	if ((m_LinearBufferWritePosition + count) - m_LinearBufferReadPosition > m_BufferLength)
 	{
 		status = STATUS_BUFFER_OVERFLOW;
-		m_LinearBufferReadPosition = (m_LinearBufferWritePosition + count) - m_BufferLength + 1;
+		return status;
 	}
 
 	SIZE_T bufferOffset = m_LinearBufferWritePosition % m_BufferLength;

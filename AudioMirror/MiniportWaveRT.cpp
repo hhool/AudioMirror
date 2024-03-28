@@ -232,7 +232,7 @@ Return Value:
 --*/
 {
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	ASSERT(OutFilterDescriptor);
 	*OutFilterDescriptor = &m_FilterDesc;
@@ -247,7 +247,7 @@ NTSTATUS __stdcall MiniportWaveRT::GetDeviceDescription(_Out_ PDEVICE_DESCRIPTIO
 
 	ASSERT(DmaDeviceDescription);
 
-	DPF_ENTER(("[CMiniportWaveRT::GetDeviceDescription]"));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	RtlZeroMemory(DmaDeviceDescription, sizeof(DEVICE_DESCRIPTION));
 
@@ -266,20 +266,20 @@ NTSTATUS __stdcall MiniportWaveRT::GetDeviceDescription(_Out_ PDEVICE_DESCRIPTIO
 
 MiniportWaveRTStream * MiniportWaveRT::GetStream()
 {
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	return m_SystemStream;
 }
 
 BOOL MiniportWaveRT::IsRenderDevice()
 {
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	return m_DeviceType == DeviceType::RenderDevice;
 }
 
 ULONG MiniportWaveRT::GetSystemPinId()
 {
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	ASSERT(IsRenderDevice());
 	return (int)WaveRenderPins::SINK_SYSTEM;
 }
@@ -287,7 +287,7 @@ ULONG MiniportWaveRT::GetSystemPinId()
 #pragma code_seg()
 IAdapterCommon* MiniportWaveRT::GetAdapter()
 {
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	return m_pAdapterCommon;
 }
 
@@ -329,7 +329,7 @@ Return Value:
 	ASSERT(OutStream);
 	ASSERT(DataFormat);
 
-	DPF_ENTER(("[MiniportWaveRT::NewStream]"));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	NTSTATUS                    ntStatus = STATUS_SUCCESS;
 	MiniportWaveRTStream*	    stream = NULL;
@@ -417,12 +417,10 @@ NTSTATUS MiniportWaveRT::StreamCreated
 )
 {
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	MiniportWaveRTStream**	streams = NULL;
 	ULONG                   count = 0;
-
-	DPF_ENTER(("[CMiniportWaveRT::StreamCreated]"));
 
 	if (IsSystemCapturePin(_Pin))
 	{
@@ -493,7 +491,7 @@ MiniportWaveRT::StreamClosed
 	MiniportWaveRTStream**		streams = NULL;
 	ULONG						count = 0;
 
-	DPF_ENTER(("[MiniportWaveRT::StreamClosed]"));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	if (IsSystemCapturePin(_Pin) || IsSystemRenderPin(_Pin))
 	{
@@ -553,7 +551,7 @@ NTSTATUS MiniportWaveRT::Create
 	UNREFERENCED_PARAMETER(UnknownOuter);
 
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,%s]", __FILE__, __LINE__, __FUNCTION__));
 
 	ASSERT(Unknown);
 	ASSERT(MiniportPair);
@@ -600,7 +598,7 @@ Return Value:
 --*/
 {
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	ASSERT(Object);
 
@@ -638,7 +636,7 @@ Return Value:
 
 void MiniportWaveRT::SetPairedMiniport(MiniportWaveRT* miniport)
 {
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	//clear all current pairs
 	if (m_pPairedMiniport) 
 	{
@@ -675,7 +673,7 @@ ULONG MiniportWaveRT::GetPinSupportedDeviceModes(_In_ ULONG PinId, _Outptr_opt_r
 	ULONG numModes;
 
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	ExAcquireFastMutex(&m_DeviceFormatsAndModesLock);
 
@@ -723,7 +721,7 @@ ULONG MiniportWaveRT::GetAudioEngineSupportedDeviceFormats(_Outptr_opt_result_bu
 	PPIN_DEVICE_FORMATS_AND_MODES pDeviceFormatsAndModes = NULL;
 
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	ExAcquireFastMutex(&m_DeviceFormatsAndModesLock);
 
@@ -755,7 +753,7 @@ MiniportWaveRT::~MiniportWaveRT()
 {
 	PAGED_CODE();
 
-	DPF_ENTER(("[CMiniportWaveRT::~CMiniportWaveRT]"));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	if (m_pPairedMiniport)
 	{
@@ -772,7 +770,7 @@ MiniportWaveRT::~MiniportWaveRT()
 NTSTATUS MiniportWaveRT::PropertyHandler_WaveFilter(PPCPROPERTY_REQUEST PropertyRequest)
 {
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,%s]", __FILE__, __LINE__, __FUNCTION__));
 
 	NTSTATUS            ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 	MiniportWaveRT*    pWaveHelper = reinterpret_cast<MiniportWaveRT*>(PropertyRequest->MajorTarget);
@@ -822,7 +820,7 @@ NTSTATUS MiniportWaveRT::PropertyHandlerProposedFormat
 
 	PAGED_CODE();
 
-	DPF_ENTER(("[CMiniportWaveRT::PropertyHandlerProposedFormat]"));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	// All properties handled by this handler require at least a KSP_PIN descriptor.
 
@@ -925,7 +923,7 @@ NTSTATUS MiniportWaveRT::PropertyHandlerProposedFormat2
 
 	PAGED_CODE();
 
-	DPF_ENTER(("[CMiniportWaveRT::PropertyHandlerProposedFormat2]"));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	// All properties handled by this handler require at least a KSP_PIN descriptor.
 
@@ -1078,7 +1076,7 @@ NTSTATUS MiniportWaveRT::IsFormatSupported
 {
 	PAGED_CODE();
 
-	DPF_ENTER(("[CMiniportWaveRT::IsFormatSupported]"));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	NTSTATUS                            ntStatus = STATUS_NO_MATCH;
 	PKSDATAFORMAT_WAVEFORMATEXTENSIBLE  pPinFormats = NULL;
@@ -1139,7 +1137,7 @@ _Post_satisfies_(return > 0)
 ULONG MiniportWaveRT::GetPinSupportedDeviceFormats(_In_ ULONG PinId, _Outptr_opt_result_buffer_(return) KSDATAFORMAT_WAVEFORMATEXTENSIBLE** ppFormats)
 {
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	PPIN_DEVICE_FORMATS_AND_MODES pDeviceFormatsAndModes = NULL;
 
@@ -1167,9 +1165,7 @@ NTSTATUS MiniportWaveRT::ValidateStreamCreate
 )
 {
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
-
-	//DPF_ENTER(("[MiniportWaveRT::ValidateStreamCreate]"));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 
 	NTSTATUS ntStatus = STATUS_NOT_SUPPORTED;
 
@@ -1193,31 +1189,31 @@ NTSTATUS MiniportWaveRT::ValidateStreamCreate
 
 const GUID * MiniportWaveRT::GetAudioModuleNotificationDeviceId()
 {
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	return m_pMiniportPair->ModuleNotificationDeviceId;
 }
 
 ULONG MiniportWaveRT::GetAudioModuleDescriptorListCount()
 {
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	return m_pMiniportPair->ModuleListCount;
 }
 
 ULONG MiniportWaveRT::GetAudioModuleListCount()
 {
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	return GetAudioModuleDescriptorListCount();
 }
 
 NTSTATUS MiniportWaveRT::VerifyPinInstanceResourcesAvailable(ULONG allocated, ULONG max)
 {
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	return (allocated < max) ? STATUS_SUCCESS : STATUS_INSUFFICIENT_RESOURCES;
 }
 
 PinType MiniportWaveRT::GetPinTypeForPinNum(ULONG nPin)
 {
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	ExAcquireFastMutex(&m_DeviceFormatsAndModesLock);
 	PinType pinType = m_DeviceFormatsAndModes[nPin].PinType;
 	ExReleaseFastMutex(&m_DeviceFormatsAndModesLock);
@@ -1227,20 +1223,20 @@ PinType MiniportWaveRT::GetPinTypeForPinNum(ULONG nPin)
 BOOL MiniportWaveRT::IsSystemCapturePin(ULONG nPinId)
 {
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	return (GetPinTypeForPinNum(nPinId) == PinType::SystemCapturePin);
 }
 
 BOOL MiniportWaveRT::IsSystemRenderPin(ULONG nPinId)
 {
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	return (GetPinTypeForPinNum(nPinId) == PinType::SystemRenderPin);
 }
 
 BOOL MiniportWaveRT::IsBridgePin(ULONG nPinId)
 {
 	PAGED_CODE();
-	DPF_ENTER(("[%s]", __FUNCTION__));
+	DPF_ENTER(("[%s,%d,0x%x,%s]", __FILE__, __LINE__, this, __FUNCTION__));
 	return (GetPinTypeForPinNum(nPinId) == PinType::BridgePin);
 }
